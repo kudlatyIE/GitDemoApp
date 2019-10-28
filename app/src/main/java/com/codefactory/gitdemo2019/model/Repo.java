@@ -4,8 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity
-public class RepoEntity {
+@Entity(tableName = "table_repo")
+public class Repo {
 
     @PrimaryKey
     @NonNull
@@ -20,7 +20,7 @@ public class RepoEntity {
     @NonNull
     private String html_url;
 
-    public RepoEntity(int id, @NonNull String name, @NonNull String full_name, String description, @NonNull String html_url) {
+    public Repo(int id, @NonNull String name, @NonNull String full_name, String description, @NonNull String html_url) {
         this.id = id;
         this.name = name;
         this.full_name = full_name;

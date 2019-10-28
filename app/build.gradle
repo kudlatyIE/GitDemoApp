@@ -55,10 +55,15 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
 
     //rx
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
 
     //room
     implementation "androidx.room:room-runtime:$project.room_version"
     annotationProcessor "androidx.room:room-compiler:$project.room_version"
+
+    //retrofit
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 }
