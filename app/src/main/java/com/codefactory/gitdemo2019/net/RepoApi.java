@@ -2,6 +2,8 @@ package com.codefactory.gitdemo2019.net;
 
 import com.codefactory.gitdemo2019.model.Repo;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 
@@ -11,7 +13,7 @@ import static com.codefactory.gitdemo2019.net.NetworkService.API_TYPE_ORGS;
 public interface RepoApi {
 
     @GET(API_TYPE_ORGS+"{orgName}"+API_REQUEST_REPOS)
-    Call<Repo> getRepositoriesByOrg(String orgName);
+    Call<List<Repo>> getRepositoriesByOrg(String orgName);
 }
 
 /*

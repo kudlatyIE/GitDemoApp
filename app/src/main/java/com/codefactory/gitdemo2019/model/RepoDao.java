@@ -25,6 +25,9 @@ public interface RepoDao {
     @Query("DELETE FROM table_repo")
     public void deleteAll();
 
+    @Query("SELECT * FROM table_repo LIMIT 1")
+    public LiveData<Repo> getAnyRepo();
+
     @Query("SELECT * FROM table_repo")
     public LiveData<List<Repo>> getAllRepos();
 

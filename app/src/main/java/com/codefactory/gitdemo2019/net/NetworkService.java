@@ -8,14 +8,14 @@ public class NetworkService {
     private static final String BASE_URL = "https://api.github.com/";
     public static final String API_TYPE_ORGS = "/orgs/";
     public static final String API_REQUEST_REPOS = "/repos/";
+    public static final String ARG_ORGANISATION_NAME = "ApplauseOSS";
 
     private static Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-
-    public static <S> S cteateService(Class<S> serviceClass) {
+    public static <S> S createService(Class<S> serviceClass) {
         return retrofit.create(serviceClass);
     }
 }
