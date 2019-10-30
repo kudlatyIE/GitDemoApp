@@ -23,4 +23,8 @@ public class GitDemoApp extends Application {
     public GitDatabaseRepository getRepository() {
         return GitDatabaseRepository.getInstance(getDatabase());
     }
+
+    public AppExecutors getAppExecutors(){
+        return mAppExecutors;
+    }
 }

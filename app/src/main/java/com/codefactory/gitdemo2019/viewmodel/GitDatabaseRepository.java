@@ -1,5 +1,7 @@
 package com.codefactory.gitdemo2019.viewmodel;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -19,17 +21,16 @@ public class GitDatabaseRepository {
 
     private GitDatabaseRepository(final AppDataBase appDataBase){
         this.appDataBase=appDataBase;
-        observableLiveData =new MediatorLiveData<>();
+        this.observableLiveData =new MediatorLiveData<>();
 
-        repositoryInstance =getInstance(appDataBase);
+//        repositoryInstance =getInstance(appDataBase);
 
-        observableLiveData.addSource(appDataBase.repoDao().getAllRepos(),
+        this.observableLiveData.addSource(appDataBase.repoDao().getAllRepos(),
                 repoEntitiess ->{
                     if (appDataBase.getDatabaseCreated().getValue()!=null){
                         observableLiveData.postValue(repoEntitiess);
                     }
                 });
-
     }
 
     public static GitDatabaseRepository getInstance(final AppDataBase database) {
@@ -42,6 +43,8 @@ public class GitDatabaseRepository {
         }
         return repositoryInstance;
     }
+
+
 
     public LiveData<List<Repo>> getRepoLiveData(){
         return observableLiveData;

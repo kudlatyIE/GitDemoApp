@@ -6,14 +6,20 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 import static com.codefactory.gitdemo2019.net.NetworkService.API_REQUEST_REPOS;
 import static com.codefactory.gitdemo2019.net.NetworkService.API_TYPE_ORGS;
 
 public interface RepoApi {
 
-    @GET(API_TYPE_ORGS+"{orgName}"+API_REQUEST_REPOS)
-    Call<List<Repo>> getRepositoriesByOrg(String orgName);
+    @GET("orgs/{orgName}/repos")
+    Call<List<Repo>> getRepositoriesByOrg(@Path("typeOrg") String typeOrg,
+                                          @Path("orgName") String orgName,
+                                          @Path("request") String request);
+
+    @GET("orgs/{request}/repos")
+    Call<List<Repo>> getRepositoriesByOrg(@Path("request") String request);
 }
 
 /*

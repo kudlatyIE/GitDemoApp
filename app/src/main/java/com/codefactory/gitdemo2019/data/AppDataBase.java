@@ -17,6 +17,8 @@ import com.codefactory.gitdemo2019.AppExecutors;
 import com.codefactory.gitdemo2019.model.Repo;
 import com.codefactory.gitdemo2019.model.RepoDao;
 
+import java.util.List;
+
 
 @Database(entities = {Repo.class}, version = 1)
 public abstract class AppDataBase extends RoomDatabase {
@@ -46,6 +48,16 @@ public abstract class AppDataBase extends RoomDatabase {
         return INSTANCE;
     }
 
+//    private void insertData(Context context, AppExecutors executors,List<Repo> data){
+//        if (INSTANCE!=null){
+//            executors.diskIO().execute(
+//                    () -> INSTANCE.runInTransaction(
+//                            ()-> INSTANCE.repoDao().insertAllRepos(data)
+//                    )
+//            );
+//        }
+//    }
+
     private static AppDataBase buildDatabase(final Context context, final AppExecutors executors){
         return Room.databaseBuilder(context, AppDataBase.class, DATABASE_NAME)
                 .addCallback(new Callback() {
@@ -68,20 +80,40 @@ public abstract class AppDataBase extends RoomDatabase {
         return isDatabaseCreated;
     }
 
-    @NonNull
-    @Override
-    protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration config) {
-        return null;
-    }
+    /*
+TODO: insert retrofit response into DB:
+                    executors.diskIO().execute(() -> {
+                            AppDataBase database = AppDataBase.getAppDataBase(context, executors);
+                            List<ProductEntity> products = DataGenerator.generateProducts();
+                            List<CommentEntity> comments =
+                                    DataGenerator.generateCommentsForProducts(products);
+                            insertData(database, products, comments);
+                            // notify that the database was created and it's ready to be used
+                            database.setDatabaseCreated();
+                        });
 
-    @NonNull
-    @Override
-    protected InvalidationTracker createInvalidationTracker() {
-        return null;
-    }
+        private static void insertData(final AppDatabase database, final List<Repo_Entity> repos {
+            database.runInTransaction(() -> {
+                database.repoDao().insertAll(repos);
 
-    @Override
-    public void clearAllTables() {
+            });
+        }
+ */
 
-    }
+//    @NonNull
+//    @Override
+//    protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration config) {
+//        return null;
+//    }
+//
+//    @NonNull
+//    @Override
+//    protected InvalidationTracker createInvalidationTracker() {
+//        return null;
+//    }
+//
+//    @Override
+//    public void clearAllTables() {
+//
+//    }
 }
