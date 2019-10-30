@@ -42,14 +42,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Repo> repos) {
                 if (repos!=null){
-                    Log.d(TAG, "Git repos size: "+repos.size());
+                    Log.d(TAG, "load data >> Git repos size: "+repos.size());
                     String result = "";
                     for (Repo rep: repos){
-                        result = result.concat(rep.getName()).concat("/n");
+                        result = result.concat(rep.getName()).concat("\n");
                     }
                     tvResult.setText(result);
                 }else {
-                    Log.d(TAG, "Git repos NULL");
+                    Log.d(TAG, "load data >> Git repos NULL");
                 }
             }
         });

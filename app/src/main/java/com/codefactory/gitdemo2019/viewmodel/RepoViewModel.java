@@ -65,7 +65,7 @@ public class RepoViewModel extends AndroidViewModel {
 
     private void downloadRepos(String orgName){
 
-        Call<List<Repo>> repoCall = NetworkService.createService(RepoApi.class).getRepositoriesByOrg(ARG_ORGANISATION_NAME);//.getRepositoriesByOrg(API_TYPE_ORGS, orgName, API_REQUEST_REPOS);
+        Call<List<Repo>> repoCall = NetworkService.createService(RepoApi.class).getRepositoriesByOrg(ARG_ORGANISATION_NAME, 5);//.getRepositoriesByOrg(API_TYPE_ORGS, orgName, API_REQUEST_REPOS);
         repoCall.enqueue(new Callback<List<Repo>>() {
             @Override
             public void onResponse(Call<List<Repo>> call, Response<List<Repo>> response) {

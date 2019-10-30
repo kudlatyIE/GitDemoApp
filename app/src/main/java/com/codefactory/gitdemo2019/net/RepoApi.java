@@ -7,6 +7,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 import static com.codefactory.gitdemo2019.net.NetworkService.API_REQUEST_REPOS;
 import static com.codefactory.gitdemo2019.net.NetworkService.API_TYPE_ORGS;
@@ -19,7 +20,8 @@ public interface RepoApi {
                                           @Path("request") String request);
 
     @GET("orgs/{request}/repos")
-    Call<List<Repo>> getRepositoriesByOrg(@Path("request") String request);
+    Call<List<Repo>> getRepositoriesByOrg(@Path("request") String request,
+                                          @Query("per_page") int limit);
 }
 
 /*
