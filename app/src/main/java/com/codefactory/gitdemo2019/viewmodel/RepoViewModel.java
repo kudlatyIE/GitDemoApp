@@ -34,17 +34,19 @@ public class RepoViewModel extends AndroidViewModel {
 
     private Application application;
 //    private AppDataBase appDataBase;
-//    private final GitDatabaseRepository repositoryInstance;
+    private final GitDatabaseRepository repositoryInstance;
     private MediatorLiveData<List<Repo>> observableLiveData;
+    private LiveData<List<Repo>> searchByLiveData;
+    private LiveData<String> filterLiveData = new MutableLiveData<String>();
+    private MutableLiveData<String> mutablePattern = new MutableLiveData<>();
 
     public RepoViewModel(@NonNull Application application) {
         super(application);
         this.application=application;
-//        this.repositoryInstance = ((GitDemoApp) application).getRepository();
+        this.repositoryInstance = ((GitDemoApp) application).getRepository();
         observableLiveData =new MediatorLiveData<>();
         observableLiveData.setValue(null);
-        LiveData<List<Repo>> repos = ((GitDemoApp) application).getRepository().getRepoLiveData();
-
+        LiveData<List<Repo>> repos = repositoryInstance.getRepoLiveData();
         observableLiveData.addSource(repos, observableLiveData::setValue);
 
         if (repos.getValue()!=null){
@@ -54,18 +56,28 @@ public class RepoViewModel extends AndroidViewModel {
         }
     }
 
-    public LiveData<List<Repo>> getReposFromDb(){
+
+
+    public void searchUpdate(String pattern){
+        mutablePattern.postValue(pattern);
+        LiveData<List<Repo>> repos = repositoryInstance.search(pattern);
+        Log.d(TAG, "searchUpdate >> pattern: "+pattern);
+//        Log.d(TAG, "search >> repos size: "+repos.getValue().size());
+        observableLiveData.postValue(repos.getValue());
+    }
+
+    public LiveData<List<Repo>> getReposFromDb(String orgName, int limit){
         //TODO: try get data from DB if fail >> call retrofit request and insert to DB
         if (observableLiveData.getValue()==null || observableLiveData.getValue().size()==0)
-            downloadRepos(ARG_ORGANISATION_NAME);
+            downloadRepos(orgName, limit);
 
         return observableLiveData;
     }
 
 
-    private void downloadRepos(String orgName){
+    private void downloadRepos(String orgName, int dataLimit){
 
-        Call<List<Repo>> repoCall = NetworkService.createService(RepoApi.class).getRepositoriesByOrg(ARG_ORGANISATION_NAME, 5);//.getRepositoriesByOrg(API_TYPE_ORGS, orgName, API_REQUEST_REPOS);
+        Call<List<Repo>> repoCall = NetworkService.createService(RepoApi.class).getRepositoriesByOrg(orgName, dataLimit);//.getRepositoriesByOrg(API_TYPE_ORGS, orgName, API_REQUEST_REPOS);
         repoCall.enqueue(new Callback<List<Repo>>() {
             @Override
             public void onResponse(Call<List<Repo>> call, Response<List<Repo>> response) {
@@ -78,7 +90,7 @@ public class RepoViewModel extends AndroidViewModel {
                     //TODO: insert into DB
                     insertData(((GitDemoApp) application).getDatabase(), ((GitDemoApp) application).getAppExecutors(), response.body());
                 }else {
-                    Log.d(TAG, "response data: NUUUUUL....");
+                    Log.d(TAG, "response data: NULL....");
                 }
 
             }

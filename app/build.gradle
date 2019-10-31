@@ -44,7 +44,7 @@ project.ext {
     retrofit2_version = "2.6.2"
     rxandroid_version = "2.0.1"
     recyclerview_version = "1.0.0"
-    butterknife_version = "8.8.1"
+    butterknife_version = "10.2.0"
 }
 
 dependencies {
@@ -67,7 +67,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
 
     //livecycle
@@ -79,5 +78,8 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
     implementation "com.jakewharton:butterknife:$butterknife_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
+
+    //paing
+    implementation 'androidx.paging:paging-runtime:2.1.0'
     
 }

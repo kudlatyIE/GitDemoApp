@@ -34,7 +34,7 @@ public interface RepoDao {
     @Query("SELECT * FROM table_repo")
     public LiveData<List<Repo>> getAllRepos();
 
-    @Query("SELECT * FROM table_repo WHERE name LIKE :pattern OR full_name LIKE :pattern OR description LIKE :pattern")
+    @Query("SELECT * FROM table_repo WHERE name LIKE :pattern OR description LIKE :pattern")
     public LiveData<List<Repo>> findRepo(String pattern);
 
 }

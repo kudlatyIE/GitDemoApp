@@ -1,6 +1,7 @@
 package com.codefactory.gitdemo2019.viewmodel;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -17,13 +18,11 @@ public class GitDatabaseRepository {
     private static GitDatabaseRepository repositoryInstance;
     private MediatorLiveData<List<Repo>> observableLiveData;
     private final MutableLiveData<Boolean> isDatabaseEmpty = new MutableLiveData<>();
-    private boolean isDBempty = true;
 
     private GitDatabaseRepository(final AppDataBase appDataBase){
         this.appDataBase=appDataBase;
         this.observableLiveData =new MediatorLiveData<>();
 
-//        repositoryInstance =getInstance(appDataBase);
 
         this.observableLiveData.addSource(appDataBase.repoDao().getAllRepos(),
                 repoEntitiess ->{
@@ -42,6 +41,18 @@ public class GitDatabaseRepository {
             }
         }
         return repositoryInstance;
+    }
+
+    public LiveData<List<Repo>> search(String pattern){
+        if (pattern!=null && pattern.length()>0){
+            LiveData<List<Repo>>  dataSearch = appDataBase.repoDao().findRepo("%".concat(pattern).concat("%"));
+            Log.d("REPO", "search >> pattern: "+pattern);
+            Log.d("REPO", "search >> is appDataBase NULL: "+(appDataBase==null));
+            if (dataSearch.getValue()!=null)Log.d("REPO", "search >> data size: "+dataSearch.getValue().size());
+//            observableLiveData.postValue(dataSearch);
+            return dataSearch;
+        }
+        return appDataBase.repoDao().getAllRepos();
     }
 
 

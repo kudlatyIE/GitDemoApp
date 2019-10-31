@@ -50,6 +50,11 @@ public class Repo {
     public String getHtml_url() {
         return html_url;
     }
+
+    @Override
+    public String toString() {
+        return name.concat(description);
+    }
 }
 
 /*
