@@ -24,10 +24,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.codefactory.gitdemo2019.net.NetworkService.API_REQUEST_REPOS;
-import static com.codefactory.gitdemo2019.net.NetworkService.API_TYPE_ORGS;
-import static com.codefactory.gitdemo2019.net.NetworkService.ARG_ORGANISATION_NAME;
-import static com.codefactory.gitdemo2019.net.NetworkService.FULL_REQUEST;
 
 public class RepoViewModel extends AndroidViewModel {
     private static final String TAG = RepoViewModel.class.getSimpleName();
@@ -58,18 +54,26 @@ public class RepoViewModel extends AndroidViewModel {
 
 
 
-    public void searchUpdate(String pattern){
+    public LiveData<List<Repo>> getFiltered(String pattern){
         mutablePattern.postValue(pattern);
         LiveData<List<Repo>> repos = repositoryInstance.search(pattern);
         Log.d(TAG, "searchUpdate >> pattern: "+pattern);
 //        Log.d(TAG, "search >> repos size: "+repos.getValue().size());
-        observableLiveData.postValue(repos.getValue());
+        observableLiveData.setValue(repos.getValue());
+        return observableLiveData;
     }
 
     public LiveData<List<Repo>> getReposFromDb(String orgName, int limit){
         //TODO: try get data from DB if fail >> call retrofit request and insert to DB
-        if (observableLiveData.getValue()==null || observableLiveData.getValue().size()==0)
-            downloadRepos(orgName, limit);
+
+        if (observableLiveData.getValue()==null || observableLiveData.getValue().size()==0) {
+            observableLiveData.setValue(repositoryInstance.getRepoLiveData().getValue());
+            if (observableLiveData.getValue()==null || observableLiveData.getValue().size()==0) {
+                downloadRepos(orgName, limit);
+            }
+        }
+
+
 
         return observableLiveData;
     }
@@ -86,9 +90,15 @@ public class RepoViewModel extends AndroidViewModel {
                 Log.d(TAG, "response STRING: "+response.toString());
 
                 if (response.body()!=null){
-                    observableLiveData.setValue(response.body());
+//                    observableLiveData.setValue(response.body());
                     //TODO: insert into DB
+//                    insertData(((GitDemoApp) application).getDatabase(), ((GitDemoApp) application).getAppExecutors(), response.body());
                     insertData(((GitDemoApp) application).getDatabase(), ((GitDemoApp) application).getAppExecutors(), response.body());
+//                    Log.d(TAG, "load from DB data size: "+repositoryInstance.getRepoLiveData().getValue().size());
+                    for (Repo repo: response.body()){
+                        Log.d(TAG, "item from net: "+repo.getFull_name());
+                    }
+//                    observableLiveData.setValue(response.body());
                 }else {
                     Log.d(TAG, "response data: NULL....");
                 }
@@ -102,14 +112,27 @@ public class RepoViewModel extends AndroidViewModel {
         });
     }
 
+
     private void insertData(AppDataBase dataBase, AppExecutors executors, List<Repo> data){
         if (dataBase!=null){
-            executors.diskIO().execute(
-                    () -> dataBase.runInTransaction(
-                            ()-> dataBase.repoDao().insertAllRepos(data)
-                    )
-            );
-        }
+//            executors.diskIO().execute(
+//                    () -> dataBase.runInTransaction(
+//                            ()-> dataBase.repoDao().insertAllRepos(data)
+//                    )
+//            );
+            executors.diskIO().execute(() -> {
+
+//                dataBase.repoDao().insertAllRepos(data);
+                for (Repo repo: data){
+                    long id = dataBase.repoDao().insert(repo);
+                    Log.d(TAG, "inserted repo id: "+id);
+                }
+                Log.d(TAG, "insert from net data >> inserted! ");
+
+            });
+        }else Log.d(TAG, "insert from net data >> DB instance NULL");
+//        Log.d(TAG, "load from DB data size: "+repositoryInstance.getRepoLiveData().getValue().size());
+//        observableLiveData.setValue(repositoryInstance.getRepoLiveData().getValue());
     }
 
 

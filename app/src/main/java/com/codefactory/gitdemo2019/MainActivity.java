@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                viewModel.searchUpdate(charSequence.toString());
+                if (charSequence!=null) loadFilteredData(charSequence.toString());
+                else loadData();
             }
 
             @Override
@@ -74,10 +75,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateView(List<Repo> repos){
-        tvResult.setText("repositories num: "+repos.size());
+        if (repos!=null)  tvResult.setText("repositories num: "+repos.size());
         adapter.swapData(repos);
+
     }
 
+    private void loadFilteredData(String pattern){
+        viewModel.getFiltered(pattern).observe(this, new Observer<List<Repo>>() {
+            @Override
+            public void onChanged(List<Repo> repos) {
+                updateView(repos);
+            }
+        });
+    }
 
 
     private void loadData(){

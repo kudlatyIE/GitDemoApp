@@ -100,20 +100,4 @@ TODO: insert retrofit response into DB:
         }
  */
 
-//    @NonNull
-//    @Override
-//    protected SupportSQLiteOpenHelper createOpenHelper(DatabaseConfiguration config) {
-//        return null;
-//    }
-//
-//    @NonNull
-//    @Override
-//    protected InvalidationTracker createInvalidationTracker() {
-//        return null;
-//    }
-//
-//    @Override
-//    public void clearAllTables() {
-//
-//    }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 public interface RepoDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insert(Repo repo);
+    long insert(Repo repo);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllRepos(List<Repo> repos);
